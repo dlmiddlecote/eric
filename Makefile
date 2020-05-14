@@ -1,6 +1,10 @@
-.PHONY: bootstrap
-bootstrap: install
+.PHONY: up
+up: install
 	docker-compose up -d
+
+.PHONY: down
+down:
+	docker-compose down
 
 .PHONY: install
 install:

@@ -15,7 +15,7 @@
 
 ```
 # start kafka and install dependencies
-make bootstrap
+make up
 
 # run app
 make run
