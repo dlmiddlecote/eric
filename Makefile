@@ -17,3 +17,7 @@ format:
 .PHONY: run
 run:
 	poetry run python eric/app.py worker -l info
+
+.PHONY: docker
+docker:
+	docker build -t eric:faust .

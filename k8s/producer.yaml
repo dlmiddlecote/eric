@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: luggage
+  labels:
+    app: luggage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: luggage
+  template:
+    metadata:
+      labels:
+        app: luggage
+    spec:
+      containers:
+        - name: eric
+          image: eric:faust
+          imagePullPolicy: Never
+          env:
+            - name: KAFKA_BROKER
+              value: kafka://kafka-broker:9092
+          command:
+            - python
+            - /eric/producer.py

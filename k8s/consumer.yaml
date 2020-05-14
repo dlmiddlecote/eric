@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eric
+  labels:
+    app: eric
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: eric
+  template:
+    metadata:
+      labels:
+        app: eric
+    spec:
+      containers:
+        - name: eric
+          image: eric:faust
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 6066
+          env:
+            - name: KAFKA_BROKER
+              value: kafka://kafka-broker:9092
+          command:
+            - python
+            - /eric/consumer.py
+            - worker
+            - -l
+            - info
