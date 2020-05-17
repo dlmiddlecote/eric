@@ -20,7 +20,7 @@ spec:
           imagePullPolicy: Never
           env:
             - name: KAFKA_BROKER
-              value: kafka://kafka-broker:9092
+              value: kafka-broker:9092
           command:
             - python
             - /eric/producer.py
