@@ -1,5 +1,5 @@
-NAME   := eric
-MODULE := eric
+NAME   := visit_aggregator
+MODULE := visit_aggregator
 
 .PHONY: up
 up: install
@@ -17,13 +17,13 @@ install:
 format:
 	poetry run black -l 120 $(MODULE)
 
-.PHONY: consumer
-consumer:
-	poetry run python $(MODULE)/consumer.py worker -l info
+.PHONY: run
+run:
+	poetry run python -m $(MODULE) worker -l info
 
 .PHONY: producer
 producer:
-	poetry run python $(MODULE)/producer.py
+	poetry run python -m $(MODULE) produce
 
 .PHONY: docker
 docker:

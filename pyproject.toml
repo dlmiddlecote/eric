@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "eric"
+name = "visit_aggregator"
 version = "0.1.0"
 description = "Kafka x Python PoC"
 authors = ["Daniel Middlecote <daniel@ometria.com>"]
@@ -10,6 +10,7 @@ faust = {version = "^1.10.4", extras = ["redis"]}
 
 [tool.poetry.dev-dependencies]
 black = {version = "^19.10b0", allow-prereleases = true}
+mypy = "^0.770"
 
 [build-system]
 requires = ["poetry>=0.12"]

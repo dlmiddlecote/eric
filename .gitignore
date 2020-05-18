@@ -3,3 +3,6 @@
 .tool-versions
 
 *-data
+
+.vscode
+.mypy_cache
