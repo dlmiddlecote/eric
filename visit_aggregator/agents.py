@@ -1,5 +1,4 @@
 import hashlib
-import json
 import logging
 from datetime import datetime
 from typing import Tuple, List
@@ -45,7 +44,7 @@ def process_window(key: Tuple, visits: List[Visit]) -> None:
 table = (
     app.Table(
         "visitors-tumbling-window",
-        default=set,
+        default=list,
         on_window_close=process_window,
         help=f"Persist visits from visits topic in windows of {config.window_size}s.",
     )
@@ -73,9 +72,9 @@ async def process_visits(stream: StreamT) -> None:
         partition_by_account_store, name="account_store", partitions=config.topic_partitions
     ):
         key = (visit.account_id, visit.store_id)
-        visits = table[key].value()
+        visits = set(table[key].value())
         visits.add(visit.id)
-        table[key] = visits
+        table[key] = list(visits)
 
 
 # Channel to use for sending active visitors over websocket connection.
@@ -98,7 +97,6 @@ async def process_active_visitors(stream: StreamT) -> None:
         await active_visitors_channel.send(value=av)
 
 
-# TODO
 @app.page("/ws")
 async def websocket_handler(self, request):
     """
@@ -109,9 +107,14 @@ async def websocket_handler(self, request):
     ws = aiohttp.web.WebSocketResponse()
     await ws.prepare(request)
 
-    async for av in active_visitors_channel:
-        await ws.send_str(
-            json.dumps(
-                {"account_id": av.account_id, "store_id": av.store_id, "ts_from": av.window[0], "ts_to": av.window[1]}
-            )
+    async for event in active_visitors_channel:
+        av = event.value
+        await ws.send_json(
+            {
+                "account_id": av.account_id,
+                "store_id": av.store_id,
+                "ts_from": av.window[0],
+                "ts_to": av.window[1],
+                "count": av.count,
+            }
         )
