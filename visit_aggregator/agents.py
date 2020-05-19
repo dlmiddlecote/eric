@@ -3,7 +3,6 @@ import logging
 from datetime import datetime
 from typing import Tuple, List
 
-import aiohttp
 import faust
 from faust.types import TopicT, StreamT
 
@@ -64,7 +63,7 @@ def partition_by_account_store(visit: Visit) -> str:
 
 
 @app.agent(visit_topic)
-async def process_visits(stream: StreamT) -> None:
+async def process_visits(stream) -> None:
     """
     Update the tumbling window with incoming visits.
     """
@@ -95,26 +94,3 @@ async def process_active_visitors(stream: StreamT) -> None:
         )
 
         await active_visitors_channel.send(value=av)
-
-
-@app.page("/ws")
-async def websocket_handler(self, request):
-    """
-    Push new active visitor counts to websocket.
-    """
-
-    # Prepare request for websocket
-    ws = aiohttp.web.WebSocketResponse()
-    await ws.prepare(request)
-
-    async for event in active_visitors_channel:
-        av = event.value
-        await ws.send_json(
-            {
-                "account_id": av.account_id,
-                "store_id": av.store_id,
-                "ts_from": av.window[0],
-                "ts_to": av.window[1],
-                "count": av.count,
-            }
-        )
