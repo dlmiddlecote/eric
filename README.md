@@ -28,7 +28,7 @@ websocat ws://127.0.0.1:6066/ws
 make producer
 
 # run a more interesting producer
-poetry run python -m visit_aggregator produce --account-id 1 --account-id 2 --account-id 3 --store-id us --store-id nz --frequency 2 --max-messages 1
+poetry run python -m visit_aggregator produce --account-id 1 --account-id 2 --account-id 3 --store-id us --store-id uk --frequency 2
 
 # run another consumer
 poetry run python -m visit_aggregator worker -l info --web-port 6067
