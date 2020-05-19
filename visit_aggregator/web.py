@@ -5,7 +5,9 @@ from visit_aggregator.app import app
 from visit_aggregator.agents import active_visitors_channel
 
 import aiohttp
+from aiostream import stream
 from faust import web
+from faust.events import Event
 from faust.types.tuples import TP
 
 
@@ -19,17 +21,28 @@ async def websocket_handler(self, request):
     ws = aiohttp.web.WebSocketResponse()
     await ws.prepare(request)
 
-    async for event in active_visitors_channel:
-        av = event.value
-        await ws.send_json(
-            {
-                "account_id": av.account_id,
-                "store_id": av.store_id,
-                "ts_from": av.window[0],
-                "ts_to": av.window[1],
-                "count": av.count,
-            }
-        )
+    # combine websocket stream, and active visitors channel
+    combined = stream.takewhile(stream.merge(active_visitors_channel, ws), lambda _: not ws.closed)
+    async with combined.stream() as s:
+        async for event in s:
+            if isinstance(event, Event):
+                av = event.value
+                await ws.send_json(
+                    {
+                        "account_id": av.account_id,
+                        "store_id": av.store_id,
+                        "ts_from": av.window[0],
+                        "ts_to": av.window[1],
+                        "count": av.count,
+                    }
+                )
+
+            elif event.type == aiohttp.WSMsgType.TEXT:
+                if event.data == "close":
+                    await ws.close()
+
+            elif event.type == aiohttp.WSMsgType.ERROR:
+                logger.warning(f"ws connection closed with error: {ws.exception()}")
 
 
 def group_topics(assignment: Set[TP]) -> MutableMapping[str, List[int]]:

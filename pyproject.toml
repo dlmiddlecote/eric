@@ -7,6 +7,7 @@ authors = ["Daniel Middlecote <daniel@ometria.com>"]
 [tool.poetry.dependencies]
 python = "^3.8"
 faust = {version = "^1.10.4", extras = ["redis"]}
+aiostream = "^0.4.1"
 
 [tool.poetry.dev-dependencies]
 black = {version = "^19.10b0", allow-prereleases = true}

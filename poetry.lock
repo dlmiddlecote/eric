@@ -28,6 +28,14 @@ version = "0.7.0"
 aiohttp = ">=1.1"
 
 [[package]]
+category = "main"
+description = "Generator-based operators for asynchronous iteration"
+name = "aiostream"
+optional = false
+python-versions = "*"
+version = "0.4.1"
+
+[[package]]
 category = "dev"
 description = "A small Python module for determining appropriate platform-specific dirs, e.g. a \"user data dir\"."
 name = "appdirs"
@@ -367,7 +375,7 @@ idna = ">=2.0"
 multidict = ">=4.0"
 
 [metadata]
-content-hash = "cdf88341aee0883b4f7d3272af4f1069589a1cfb468380418ee219a71b07587e"
+content-hash = "de81fba12e9d862998dbe74a14e14c912bc753c00353c033e10443ee5d63dfb3"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -388,6 +396,9 @@ aiohttp = [
 aiohttp-cors = [
     {file = "aiohttp-cors-0.7.0.tar.gz", hash = "sha256:4d39c6d7100fd9764ed1caf8cebf0eb01bf5e3f24e2e073fda6234bc48b19f5d"},
     {file = "aiohttp_cors-0.7.0-py3-none-any.whl", hash = "sha256:0451ba59fdf6909d0e2cd21e4c0a43752bc0703d33fc78ae94d9d9321710193e"},
+]
+aiostream = [
+    {file = "aiostream-0.4.1.tar.gz", hash = "sha256:9055e772f197dc0c1bd3a757edd20b086bc74b257ceb7d690cb3d72b8b70d69a"},
 ]
 appdirs = [
     {file = "appdirs-1.4.4-py2.py3-none-any.whl", hash = "sha256:a841dacd6b99318a741b166adb07e19ee71a274450e68237b4650ca1055ab128"},
