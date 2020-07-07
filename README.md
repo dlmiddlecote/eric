@@ -4,7 +4,22 @@
 "Where does it go?"  
 "It stays where it is, I think."
 
+Eric is a sample application for learning how Kafka can be used in a Python and Kubernetes environment. [Faust][faust] is
+the Python framework used to handle the boilerplate, as well as many of features from [Kafka Streams][streams].
+
+For a great overview of Kafka and Kafka Streams see the [tutorial from Confluent][streams-tutorial].
+
+[faust]: https://faust.readthedocs.io/en/latest/
+[streams]: https://kafka.apache.org/documentation/streams/
+[streams-tutorial]: https://www.confluent.io/blog/kafka-streams-tables-part-1-event-streaming/
+
 ## Overview
+
+Eric implements a 'visit aggregator'. That is, an application that receives unique events that represent a visit to a
+website, and counts how many visits occurred within a set window (1m intervals by default). These aggregated counts are
+then streamed to a websocket, which powers a visitors dashboard.
+
+A diagram of the architecture is included below.
 
 ### Diagram
 ```
@@ -48,17 +63,23 @@
             └─────────────────────────┘
 ```
 
-## Requirements
+## System Requirements
 
-- Docker
-- Docker Compose
-- Python 3.8
-- Poetry
-- websocat
+- [Docker][docker]
+- [Docker Compose][docker-compose]
+- [Python 3.8][python]
+- [Poetry][python-poetry]
+- [websocat][websocat]
+
+[docker]: https://docs.docker.com/get-docker/
+[docker-compose]: https://docs.docker.com/compose/install/
+[python]: https://www.python.org/downloads/release/python-380/
+[python-poetry]: https://python-poetry.org/docs/#installation
+[websocat]: https://github.com/vi/websocat
 
 ## Running
 
-```
+```sh
 # start kafka and install dependencies
 make up
 
